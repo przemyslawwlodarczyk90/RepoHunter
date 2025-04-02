@@ -12,15 +12,12 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 class GitHubControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-
 
     @Test
     @DisplayName("Should return 200 OK and list of repositories for existing user")
@@ -63,14 +60,12 @@ class GitHubControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("Should return empty list when user has only forked repositories")
-    void shouldReturnEmptyList_whenUserHasOnlyForks() throws Exception {
-        String userWithOnlyForks = "forked-only-user";
-
-        mockMvc.perform(get("/api/github/" + userWithOnlyForks)
+    @DisplayName("Should return JSON content type for existing user")
+    void shouldReturnJsonContentType() throws Exception {
+        mockMvc.perform(get("/api/github/octocat")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
 

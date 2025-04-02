@@ -12,7 +12,7 @@
     </parent>
 
     <groupId>com.example</groupId>
-    <artifactId>RepoLens</artifactId>
+    <artifactId>RepoHunter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>RepoLens</name>
     <description>Application to fetch and display GitHub repositories with branches and commit info.</description>

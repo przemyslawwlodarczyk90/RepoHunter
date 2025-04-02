@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Component
 @RequiredArgsConstructor
 public class RepositoryHandler {
@@ -18,15 +17,17 @@ public class RepositoryHandler {
     private final BranchHandler branchHandler;
 
     public List<RepositoryDto> getNonForkRepositoriesWithBranches(String username) {
-        List<GitHubRepositoryResponse> repositories = gitHubClient.getUserRepositories(username);
-
-        return repositories.stream()
+        return gitHubClient.getUserRepositories(username).stream()
                 .filter(repo -> !repo.isFork())
-                .map(repo -> new RepositoryDto(
-                        repo.getName(),
-                        repo.getOwner().getLogin(),
-                        branchHandler.getBranches(repo.getOwner().getLogin(), repo.getName())
-                ))
+                .map(this::mapToRepositoryDto)
                 .collect(Collectors.toList());
+    }
+
+    private RepositoryDto mapToRepositoryDto(GitHubRepositoryResponse repo) {
+        return new RepositoryDto(
+                repo.getName(),
+                repo.getOwner().getLogin(),
+                branchHandler.getBranches(repo.getOwner().getLogin(), repo.getName())
+        );
     }
 }

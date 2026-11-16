@@ -1,90 +1,23 @@
-# RepoHunter 📈
+# RepoHunter
 
-Prosta aplikacja Spring Boot, która pobiera publiczne repozytoria GitHub danego użytkownika (z pominięciem forków) i zwraca listę gałęzi z SHA ostatniego commita.
+Ćwiczenie z odpytywania API GitHuba w Spring Boot. Po podaniu loginu API zwraca publiczne repozytoria użytkownika z pominięciem forków. Dla każdego podaje nazwę, login właściciela oraz gałęzie i SHA ich ostatnich commitów.
 
----
+## Uruchomienie
 
-## ✨ Funkcjonalności
+Potrzebujesz JDK 21 i tokena GitHuba. Ustaw token w lokalnej zmiennej środowiskowej `GITHUB_API_TOKEN`. W PowerShell uruchom:
 
-- Wejście: nazwa użytkownika GitHub
-- Wyjście: lista repozytoriów (bez forków) zawierająca:
-  - nazwę repozytorium,
-  - login właściciela,
-  - listę gałęzi, z których każda zawiera:
-    - nazwę gałęzi,
-    - SHA ostatniego commita.
-- Integracja z GitHub REST API v3
-- Obsługa błędów (np. nieistniejący użytkownik)
-- Obsługa tokena GitHub w celu uniknięcia limitów zapytań
-- Zaimplementowane testy integracyjne
-
----
-
-## ⚙️ Wymagania
-
-- Java 21  
-- Maven
-
----
-
-## 🚀 Uruchomienie aplikacji
-
-```bash
-mvn spring-boot:run
+```powershell
+.\mvnw.cmd spring-boot:run
 ```
 
-### Przykładowe zapytanie:
+Na Linuxie lub macOS użyj `./mvnw spring-boot:run`. Przykładowe zapytanie:
 
-```
-GET /api/github/octocat
-```
-
----
-
-## ❌ Obsługa błędów
-
-W przypadku nieistniejącego użytkownika API zwraca:
-
-```json
-{
-  "status": 404,
-  "message": "GitHub user not found: {username}"
-}
+```http
+GET http://localhost:8080/api/github/octocat
 ```
 
----
+Nieistniejący użytkownik zwraca HTTP 404 z polami `status` i `message`.
 
-## 🧪 Testy
+## Testy
 
-Zawarte testy integracyjne obejmują m.in.:
-
-- prawidłowego użytkownika z repozytoriami,
-- użytkownika nieistniejącego,
-- poprawność struktury JSON,
-- obecność nagłówka `Content-Type: application/json`.
-
-> ℹ️ Uwaga: Testy wymagają tokena GitHub z uwagi na limity zapytań (rate limit).
-
----
-
-## 🔐 Token GitHub
-
-Aby uniknąć limitu 60 zapytań na godzinę:
-
-1. Wygeneruj token tutaj:  
-   [https://github.com/settings/tokens](https://github.com/settings/tokens)
-
-2. Umieść go lokalnie w pliku `application.properties`:
-
-```properties
-github.api.token=tu_wklej_token
-```
-
-
-
-## 👤 Autor
-
- **Przemek**.
-
----
-
+`.\mvnw.cmd test` uruchamia m.in. testy integracyjne odpowiedzi API. Korzystają one z GitHuba, więc obowiązują limity zapytań.
